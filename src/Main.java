@@ -38,6 +38,7 @@ public class Main {
         save3.saveGame(3);
         List<String> gameProgressList = Arrays.asList("save1.dat", "save2.dat", "save3.dat");
         zipFiles("Games/savegames/gameProgress.zip", gameProgressList);
+        deleteFiles("Games/savegames/", gameProgressList);
 
     }
 
@@ -88,7 +89,7 @@ public class Main {
     }
 
     public static void zipFiles(String path, List<String> data) {
-        try (ZipOutputStream zout = new ZipOutputStream(new FileOutputStream("Games/savegames/gameProgress.zip"))) {
+        try (ZipOutputStream zout = new ZipOutputStream(new FileOutputStream(path))) {
             for (String s : data) {
                 FileInputStream fis = new FileInputStream("Games/savegames/" + s);
                 ZipEntry entry = new ZipEntry(s);
@@ -98,11 +99,15 @@ public class Main {
                 zout.write(buffer);
                 zout.closeEntry();
                 fis.close();
-                File file = new File("Games/savegames/" + s);
-                file.delete();
             }
         } catch (Exception ex) {
             System.out.println(ex.getMessage());
+        }
+    }
+    public static void deleteFiles(String path, List<String> data) {
+        for (String s : data) {
+            File file = new File(path + s);
+            file.delete();
         }
     }
 }
